@@ -4,9 +4,11 @@ import com.ravi.recipe.domain.*;
 import com.ravi.recipe.repositories.CategoryRepository;
 import com.ravi.recipe.repositories.RecipeRepository;
 import com.ravi.recipe.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import java.util.Set;
 /* Created by: Venkata Ravichandra Cherukuri
    Created on: 3/29/2020 */
 @Component
+@Slf4j
 public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private RecipeRepository recipeRepository;
@@ -31,6 +34,7 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         Optional<UnitOfMeasure> ounceUom = unitOfMeasureRepository.findByDescription("Ounce");
@@ -81,6 +85,8 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
 
         recipeRepository.save(guac);
 
+        log.debug("Created Guacamole recipe and saved it to the repo");
+
         // Chicken Taco
         Recipe chickenTaco = new Recipe();
         chickenTaco.setDirections("Making of Chicken Taco");
@@ -115,5 +121,7 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
         chickenTaco.setCategories(chickenTacoCategories);
 
         recipeRepository.save(chickenTaco);
+
+        log.debug("Created Chicken Taco and saved it to the repository");
     }
 }

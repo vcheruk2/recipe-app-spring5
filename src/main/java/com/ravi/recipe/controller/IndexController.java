@@ -6,6 +6,7 @@ import com.ravi.recipe.repositories.CategoryRepository;
 import com.ravi.recipe.repositories.RecipeRepository;
 import com.ravi.recipe.repositories.UnitOfMeasureRepository;
 import com.ravi.recipe.service.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Optional;
 
 @Controller
+@Slf4j
 public class IndexController {
 
     private CategoryRepository categoryRepository;
@@ -39,7 +41,9 @@ public class IndexController {
         System.out.println("Unit of Measure ID = "+optionalUnitOfMeasure.get().getId());
 
         System.out.println("hi 123");
+        log.debug("Calling index page");
 
+        //model.addAttribute("recipes", recipeRepository.findAll());
         model.addAttribute("recipes", recipeService.getRecipes());
 
         return "index";
