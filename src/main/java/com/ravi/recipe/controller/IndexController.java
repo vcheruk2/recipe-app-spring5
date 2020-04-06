@@ -20,7 +20,6 @@ public class IndexController {
     private CategoryRepository categoryRepository;
     private UnitOfMeasureRepository unitOfMeasureRepository;
     private RecipeRepository recipeRepository;
-
     private final RecipeService recipeService;
 
     public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository, RecipeRepository recipeRepository, RecipeService recipeService) {

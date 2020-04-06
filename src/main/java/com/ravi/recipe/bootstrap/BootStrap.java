@@ -101,7 +101,6 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
         Notes chickenTacoNotes = new Notes();
         chickenTaco.setNotes(chickenTacoNotes);
         chickenTacoNotes.setRecipeNotes("Chicken Taco Recipe Notes");
-        //chickenTacoNotes.setRecipe(chickenTaco);
 
         Ingredient oil = new Ingredient("Chicken Taco Oil", BigDecimal.valueOf(2),
                             teaSpoonUom.get() );

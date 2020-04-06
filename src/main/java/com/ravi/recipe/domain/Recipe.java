@@ -43,11 +43,17 @@ public class Recipe {
     @JoinTable(name = "recipe_category",
         joinColumns = @JoinColumn(name = "recipe_id"),
         inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
-        this.notes = notes;
-        notes.setRecipe(this);
+        if (notes != null){
+            this.notes = notes;
+            notes.setRecipe(this);
+        }
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients){
+        this.ingredients = ingredients;
     }
 
     public Recipe addIngredient(Ingredient ingredient){

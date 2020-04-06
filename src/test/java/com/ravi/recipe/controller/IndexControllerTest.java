@@ -1,5 +1,7 @@
 package com.ravi.recipe.controller;
 
+import com.ravi.recipe.converters.RecipeCommandToRecipe;
+import com.ravi.recipe.converters.RecipeToRecipeCommand;
 import com.ravi.recipe.domain.Category;
 import com.ravi.recipe.domain.Recipe;
 import com.ravi.recipe.domain.UnitOfMeasure;
@@ -34,6 +36,11 @@ class IndexControllerTest {
     public static RecipeServiceImpl recipeService;
 
     @Mock
+    static RecipeCommandToRecipe recipeCommandToRecipe;
+    @Mock
+    static RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
     public static CategoryRepository categoryRepository;
     @Mock
     public static UnitOfMeasureRepository unitOfMeasureRepository;
@@ -45,7 +52,7 @@ class IndexControllerTest {
     @BeforeAll
     public static void setUp(){
         MockitoAnnotations.initMocks(new IndexControllerTest());
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeToRecipeCommand, recipeCommandToRecipe);
         indexController = new IndexController(categoryRepository, unitOfMeasureRepository, recipeRepository, recipeService);
     }
 
@@ -101,4 +108,6 @@ class IndexControllerTest {
         Set<Recipe> capturedRecipes = argumentCaptor.getValue();
         assertEquals(2, capturedRecipes.size());
     }
+
+
 }
