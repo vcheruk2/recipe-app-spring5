@@ -3,14 +3,18 @@ package com.ravi.recipe.domain;
 /* Created by: Venkata Ravichandra Cherukuri
    Created on: 3/28/2020 */
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class Recipe {
 
     @Id
@@ -50,10 +54,6 @@ public class Recipe {
             this.notes = notes;
             notes.setRecipe(this);
         }
-    }
-
-    public void setIngredients(Set<Ingredient> ingredients){
-        this.ingredients = ingredients;
     }
 
     public Recipe addIngredient(Ingredient ingredient){
