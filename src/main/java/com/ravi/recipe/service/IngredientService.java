@@ -6,4 +6,5 @@ import com.ravi.recipe.commands.IngredientCommand;
    Created on: 4/11/2020 */
 public interface IngredientService {
     IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
+    IngredientCommand saveIngredientCommand(IngredientCommand command);
 }
