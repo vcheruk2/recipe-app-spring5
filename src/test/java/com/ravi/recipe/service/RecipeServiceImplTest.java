@@ -2,6 +2,7 @@ package com.ravi.recipe.service;
 
 import com.ravi.recipe.converters.RecipeCommandToRecipe;
 import com.ravi.recipe.converters.RecipeToRecipeCommand;
+import com.ravi.recipe.domain.Ingredient;
 import com.ravi.recipe.domain.Recipe;
 import com.ravi.recipe.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,5 +74,36 @@ class RecipeServiceImplTest {
 
         // then
         verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void getIngredients(){
+        final long ingredientId = 1L;
+
+        // given
+        Recipe recipe = new Recipe();
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(ingredientId);
+        ingredient.setDescription("Salt");
+
+        recipe.addIngredient(ingredient);
+
+        // when
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // then
+        Set<Ingredient> ingredientSet = recipeService.findById(1L).getIngredients();
+        assertNotNull(ingredientSet);
+
+        Ingredient reqIngredient = null;
+        for(Ingredient i : ingredientSet){
+            if (i.getId() == ingredientId){
+                reqIngredient = i;
+                break;
+            }
+        }
+
+        assertNotNull(reqIngredient);
+        assertEquals(reqIngredient.getDescription(), "Salt");
     }
 }

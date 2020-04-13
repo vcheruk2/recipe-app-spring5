@@ -73,10 +73,8 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
         guac.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
         guac.setSource("Simply Recipes");
 
-        Set<Ingredient> guacIngredients = new HashSet<>();
-        guacIngredients.add(avocados);
-        guacIngredients.add(salt);
-        guac.setIngredients(guacIngredients);
+        guac.addIngredient(avocados);
+        guac.addIngredient(salt);
 
         Set<Category> guacCategories = new HashSet<>();
         guacCategories.add(american.get());
@@ -108,11 +106,8 @@ public class BootStrap implements ApplicationListener<ContextRefreshedEvent> {
         Ingredient chicken = new Ingredient("Chicken", BigDecimal.valueOf(6),
                                 ounceUom.get());
 
-        HashSet<Ingredient> chickenTacoIngredients = new HashSet<>();
-        chickenTacoIngredients.add(oil);
-        chickenTacoIngredients.add(chicken);
-
-        chickenTaco.setIngredients(chickenTacoIngredients);
+        chickenTaco.addIngredient(oil);
+        chickenTaco.addIngredient(chicken);
 
         HashSet<Category> chickenTacoCategories = new HashSet<>();
         chickenTacoCategories.add(american.get());

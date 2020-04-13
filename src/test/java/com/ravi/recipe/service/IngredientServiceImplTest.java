@@ -2,6 +2,7 @@ package com.ravi.recipe.service;
 
 import com.ravi.recipe.commands.IngredientCommand;
 import com.ravi.recipe.converters.IngredientToIngredientCommand;
+import com.ravi.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.ravi.recipe.domain.Ingredient;
 import com.ravi.recipe.domain.Recipe;
 import com.ravi.recipe.repositories.RecipeRepository;
@@ -10,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -20,13 +19,16 @@ import static org.mockito.Mockito.*;
 
 class IngredientServiceImplTest {
 
+    private final IngredientToIngredientCommand ingredientToIngredientCommand;
+
     @Mock
     RecipeRepository recipeRepository;
 
-    @Mock
-    IngredientToIngredientCommand ingredientToIngredientCommand;
-
     IngredientServiceImpl ingredientServiceImpl;
+
+    public IngredientServiceImplTest(){
+        this.ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+    }
 
     @BeforeEach
     void setUp() {
@@ -46,24 +48,18 @@ class IngredientServiceImplTest {
         Ingredient ingredient3 = new Ingredient();
         ingredient3.setId(3L);
 
-        Set<Ingredient> ingredientSet = new HashSet<>();
-        ingredientSet.add(ingredient1);
-        ingredientSet.add(ingredient2);
-        ingredientSet.add(ingredient3);
-
         recipe.addIngredient(ingredient1);
         recipe.addIngredient(ingredient2);
         recipe.addIngredient(ingredient3);
-        recipe.setIngredients(ingredientSet);
 
         // when
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
 
         // then
-        IngredientCommand ingredientCommand = ingredientServiceImpl.findByRecipeIdAndIngredientId(1L, 1L);
+        IngredientCommand ingredientCommand = ingredientServiceImpl.findByRecipeIdAndIngredientId(1L, 3L);
 
-        assertEquals(ingredientCommand.getId(), 3L);
-        assertEquals(ingredientCommand.getRecipeId(), 2L);
+        assertEquals(3L, ingredientCommand.getId());
+        assertEquals(1L, ingredientCommand.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyLong());
     }
 }
