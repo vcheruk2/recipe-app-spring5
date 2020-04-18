@@ -1,6 +1,8 @@
 package com.ravi.recipe.controller;
 
 import com.ravi.recipe.commands.IngredientCommand;
+import com.ravi.recipe.commands.RecipeCommand;
+import com.ravi.recipe.commands.UnitOfMeasureCommand;
 import com.ravi.recipe.service.IngredientService;
 import com.ravi.recipe.service.RecipeService;
 import com.ravi.recipe.service.UnitOfMeasureService;
@@ -61,5 +63,23 @@ public class IngredientController {
         log.debug("saved ingredient id:" + savedCommand.getId());
 
         return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+    }
+
+    @GetMapping("recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model){
+
+        // TODO: Validation pending to see if the recipeId value is correct/acceptable.
+        RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+
+        model.addAttribute("ingredient" ,ingredientCommand);
+
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
+
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientform";
     }
 }
