@@ -101,7 +101,49 @@ class IngredientServiceImplTest {
     }
 
     @Test
-    void saveNewIngredients() throws Exception {
+    public void deleteIngredientCommand() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(2L);
 
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setId(1L);
+
+        recipe.addIngredient(ingredient);
+        recipe.addIngredient(ingredient2);
+        assertEquals(2, recipe.getIngredients().size());
+
+        IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(ingredient);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        ingredientServiceImpl.deleteIngredientCommand(ingredientCommand);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        assertEquals(1, recipe.getIngredients().size());
+    }
+
+    @Test
+    public void deleteIngredientById() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(2L);
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
+        ingredient.setRecipe(recipe);
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setId(1L);
+        ingredient2.setRecipe(recipe);
+
+        recipe.addIngredient(ingredient);
+        recipe.addIngredient(ingredient2);
+        assertEquals(2, recipe.getIngredients().size());
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        ingredientServiceImpl.deleteById(2L, 2L);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+        assertEquals(1, recipe.getIngredients().size());
     }
 }

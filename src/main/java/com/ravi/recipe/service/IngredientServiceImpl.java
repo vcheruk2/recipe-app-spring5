@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 /* Created by: Venkata Ravichandra Cherukuri
    Created on: 4/11/2020 */
@@ -110,6 +111,62 @@ public class IngredientServiceImpl implements IngredientService {
 
             // TODO: Check for failure conditions
             return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+        }
+    }
+
+    @Override
+    public void deleteIngredientCommand(IngredientCommand command) {
+
+        if (command == null){
+            log.error("Provided Ingredient command was null");
+            return;
+        }
+
+        Optional<Recipe> recipe = recipeRepository.findById(command.getRecipeId());
+
+        if (recipe.isPresent()){
+            Recipe recipeObj = recipe.get();
+            Set<Ingredient> ingredients = recipeObj.getIngredients();
+            for (Ingredient ingredient : ingredients){
+                if(ingredient.getId() == command.getId()){
+                    ingredients.remove(ingredient);
+                    break;
+                }
+            }
+
+            recipeRepository.save(recipeObj);
+        }
+        else{
+            log.error("Unable to find the recipe id "+command.getRecipeId()+" for the provided ingredient");
+            return;
+        }
+    }
+
+    @Override
+    public void deleteById(Long recipeId, Long ingredientId) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if (recipeOptional.isPresent()){
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .findFirst();
+            if (ingredientOptional.isPresent()){
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setRecipe(null);
+                recipe.getIngredients().remove(ingredient);
+                recipeRepository.save(recipe);
+            }
+            else {
+                log.error("Provided ingredient id "+ingredientId+" not found");
+                return;
+            }
+        }
+        else{
+            log.error("Unable to find the recipe id "+recipeId+" for the provided ingredient");
         }
     }
 }
