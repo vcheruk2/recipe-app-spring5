@@ -93,7 +93,21 @@ public class RecipeControllerTest {
         when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/1/show"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+
+    @Test
+    public void testNumberFormatException() throws Exception {
+
+        // given
+        //when(recipeService.findById(any())).thenThrow(NumberFormatException.class);
+
+        // when
+        mockMvc.perform(get("/recipe/shouldBeNumber/show"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
     }
 
     /*@Test
